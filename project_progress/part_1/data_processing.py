@@ -13,7 +13,7 @@ from nltk.corpus import stopwords
 import json
 from array import array
 
-nltk.download("stopwords")
+#nltk.download("stopwords")
 
 #load data into memory:
 docs_path = 'data/fashion_products_dataset.json'
@@ -41,7 +41,7 @@ def build_terms(text):
 
 def extract_product_details(details_list):
     '''
-    this function converts a list of dicts in 'Product details' into a single string
+    This function converts a list of dicts in 'Product details' into a single string
     '''
     if not isinstance(details_list, list):
         return ""
@@ -53,9 +53,41 @@ def extract_product_details(details_list):
                 text_parts.append(str(v))
     return " ".join(text_parts)
 
+def parse_discount(discount_str):
+    '''
+    Function used to replace the discount field from: "48% off" to 0.48 in order to simplfy the processing of the data.
+    
+    '''
+    if not discount_str:
+        return 0.0
+    match = re.search(r"(\d+)", discount_str)
+    return float(match.group(1)) / 100 if match else 0.0
+
+
+def parse_float(value):
+    """
+    Convert strings like '1,499' or '3.9' to float
+    Returns None if conversion fails
+    """
+    if not value:
+        return None
+    try:
+        return float(str(value).replace(",", "").strip())
+    except ValueError:
+        return None
+    
+
+def clean_url(url):
+    '''
+    Function done to clean the URLs since all the urls can be shortened to the "?" and will display the same URL
+    '''
+    if not isinstance(url, str):
+        return ""
+    return url.split("?")[0]
+
 def create_index(docs):
     '''
-    this function is done to create a dictionary of indexes with the words and the documents they appear in
+    Function done to create a dictionary of indexes with the words and the documents they appear in
     
     '''
 
@@ -111,25 +143,25 @@ def preprocess_dataset(input_path, output_path_index, output_path_clean):
             "sub_category": doc.get("sub_category", ""),
             "seller": doc.get("seller", ""),
             "out_of_stock": doc.get("out_of_stock", ""),
-            "selling_price": doc.get("selling_price", ""),
-            "discount": doc.get("discount", ""),
-            "actual_price": doc.get("actual_price", ""),
-            "average_rating": doc.get("average_rating", ""),
-            "url": doc.get("url", "")
+            "selling_price": parse_float(doc.get("selling_price", "")),
+            "discount": parse_discount(doc.get("discount", "")),
+            "actual_price": parse_float(doc.get("actual_price", "")),
+            "average_rating": parse_float(doc.get("average_rating", "")),
+            "url": clean_url(doc.get("url", ""))
         })
 
     with open(output_path_clean, "w", encoding="utf-8") as f:
         for doc in cleaned_docs:
             f.write(json.dumps(doc) + "\n")
 
-    print(f"✅ Saved cleaned docs to {output_path_clean}")
+    print(f" Saved cleaned docs to {output_path_clean}")
 
     index = create_index(docs)
     with open(output_path_index, "w", encoding="utf-8") as f:
         json.dump({term: [[pid, list(pos)] for pid, pos in postings]
                   for term, postings in index.items()}, f)
 
-    print(f"✅ Inverted index saved to {output_path_index}")
+    print(f" Inverted index saved to {output_path_index}")
 
 
 if __name__ == "__main__":
