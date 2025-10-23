@@ -23,7 +23,7 @@ lines = [l.strip().replace(' +', ' ') for l in lines]
 
 def build_terms(text):
     '''
-    this function is used to clean the text before indexing
+    Function used to clean the text before indexing
     
     '''
     stemmer = PorterStemmer()

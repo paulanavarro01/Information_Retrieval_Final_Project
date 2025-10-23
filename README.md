@@ -1,19 +1,62 @@
-# Information Retrieval and Web Analytics (IRWA) - Final Project template
+# Information Retrieval and Web Analytics (IRWA) - Final Project
 
-# PART 1
+This repository contains the final project implementation for the course **Information Retrieval and Web Analytics (IRWA)**. The project focuses on building a basic Information Retrieval system based on a fashion product dataset, covering the stages of data preprocessing, indexing, ranking, and evaluation.
 
-In the Part1 folder you can find the "data_processing.py" file, this file has been created in order to complete the first part of the project: Data preparation and Index Creation.
-This prepares the dataset for the following stages of the Information Retrieval Project.
+## PART 1
 
-There are some files involved in this first part of the project:
-- *data/fashion_products_dataset.json*: this is the original dataset without preprocessing, it has been used to understand what we are working with and how to do it.
-- *part_1/data_preprocessing.py*: this python file is used in order to preprocess the data in the json file, here 4 functions have been defined in order to prepare the data for the following stages of the project.
-- *data/processed_docs.jsonl*: this is the output file with the cleaned fields for each document.
-- *data/inverted_index.json*: this document is the inverted index of our original dataset.
+### How to run the code? 
 
-In order to execute the code the only thing that has to be done is executing the file *part_1/data_preprocessing.py*, this will create the new files *data/processed_docs.jsonl* and *data/inverted_index.json*.
+In order to execute the code these are the steps to follow:
+#### 1. Environment Setup and Installation
+
+All project code must be executed from within the dedicated virtual environment named `irwa-venv`.
+1.  **Create the Virtual Environment:**
+    ```bash
+    python3 -m venv irwa-venv
+    ```
+
+2.  **Activate the Environment:**
+    ```bash
+    source irwa-venv/bin/activate
+    ```
+
+3.  **Install Dependencies:**
+    With the environment active, install the necessary libraries. 
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+#### 2. Dataset Preprocess and Cleaning
+
+Execute the preprocessing script. This file is responsible for cleaning the dataset, applying tokenization, and creating the inverted index.
+
+```bash
+
+python part_1/data_preprocessing.py
+```
+After this script is executed, two files will be created inside the data folder.
+
+```bash
+
+processed_docs.jsonl
+```
+Which is the cleaned and preprocessed datased. And
+```bash
+
+inverted_index.json
+```
+Which is the file with the inverted index.
+
+#### 3. Exploratory Data Analyis
 
 
+For the second activity, a Jupiter notebook has been created inside the part_1 folder: 
+```bash
 
+exploratory_data_analysis.ipynb
+```
+In order to execute this file it's important that the two previous parts have already been executed, since in the file the cleaned dataset **processed_docs.jsonl** will be analyzed.
+
+In order to see all the outputs all that has to be done is executing the cells in order.
 
 
