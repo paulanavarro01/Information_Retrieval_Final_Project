@@ -13,10 +13,10 @@ from nltk.corpus import stopwords
 import json
 from array import array
 
-#nltk.download("stopwords")
+nltk.download("stopwords")
 
 #load data into memory:
-docs_path = 'data/fashion_products_dataset.json'
+docs_path = '../../data/fashion_products_dataset.json'
 with open(docs_path) as fp:
     lines = fp.readlines()
 lines = [l.strip().replace(' +', ' ') for l in lines]
@@ -166,7 +166,7 @@ def preprocess_dataset(input_path, output_path_index, output_path_clean):
 
 if __name__ == "__main__":
     preprocess_dataset(
-        input_path="data/fashion_products_dataset.json",
-        output_path_index="data/inverted_index.json",
-        output_path_clean="data/processed_docs.jsonl"
+        input_path="../../data/fashion_products_dataset.json",
+        output_path_index="../../data/inverted_index.json",
+        output_path_clean="../../data/processed_docs.jsonl"
     )
