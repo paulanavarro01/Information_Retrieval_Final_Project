@@ -17,7 +17,7 @@ All project code must be executed from within the dedicated virtual environment 
 
 2.  **Activate the Environment:**
     ```bash
-    source irwa-venv/bin/activate
+    irwa-venv/bin/activate
     ```
 
 3.  **Install Dependencies:**
