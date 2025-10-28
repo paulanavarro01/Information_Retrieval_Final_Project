@@ -16,7 +16,6 @@ sys.path.append(parent_dir)
 from part_1.data_processing import build_terms
 
 proc_doc_path='../data/processed_docs.jsonl'
-validation_path='../data/validation_labels.csv'
 
 
 def load_processed_docs(path=proc_doc_path):
@@ -54,22 +53,6 @@ def create_index_tfidf(docs):
         tokens = build_terms(combined_text)
         
         counts= collections.Counter(tokens)
-        #current_doc_index = {}
-
-        '''for pos, term in enumerate(tokens):
-            try:
-                current_doc_index[term][1].append(pos)
-            except KeyError:
-                current_doc_index[term] = [pid, array('I', [pos])]
-       
-        #norm for TF
-        norm=math.sqrt(sum(len(posting[1])**2 for posting in current_doc_index.values())) if current_doc_index else 0.0
-        for term, posting in current_doc_index.items():
-            tf[term].append(len(posting[1])/norm if norm>0 else 0.0)
-            df[term] +=1
-            index[term].append(posting)
-
-         '''
         norm=math.sqrt(sum(c**2 for c in counts.values())) or 1.0
 
         for term,c in counts.items():
