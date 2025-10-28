@@ -9,16 +9,25 @@ import numpy as np
 import pandas as pd
 import sys
 
-parent_dir=os.path.dirname(os.path.abspath(__file__))
-sys.path.append(parent_dir)
+
+
+#parent_dir=os.path.dirname(os.path.abspath(__file__))
+#sys.path.append(parent_dir)
+project_root= os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(project_root)
 
 #assumption: assuming part_1.dataprocessing has a correct version of build_terms
 from part_1.data_processing import build_terms
 
+#Import the processed and validation csv from the Data folder
 proc_doc_path='../data/processed_docs.jsonl'
 
 
 def load_processed_docs(path=proc_doc_path):
+    '''
+    Loads the processed product documents stored in JSONL format.
+    Each line is one JSON line representing one product.
+    '''
     with open(path,'r',encoding='utf-8') as f:
         docs=[json.loads(line)for line in f if line.strip()]
     return docs
@@ -26,8 +35,18 @@ def load_processed_docs(path=proc_doc_path):
 '''
 Inverted index
 '''
-
+ 
 def create_index_tfidf(docs):
+    """
+    Build an inverted index and computes TF, IDF and DF.
+    
+    The function returns:
+        index: {term: [(pid, count), ...]}
+        tf: {term: {pid: normalized_tf, ...}}
+        idf: {term: inverse_document_frequency}
+        df: {term: document_frequency}
+        tittle_index: {pid: product title}
+    """
     index = defaultdict(list)
     tf=defaultdict(dict) #why dic in the report
     df=defaultdict(int)
@@ -53,6 +72,22 @@ def create_index_tfidf(docs):
         tokens = build_terms(combined_text)
         
         counts= collections.Counter(tokens)
+        #current_doc_index = {}
+
+        '''for pos, term in enumerate(tokens):
+            try:
+                current_doc_index[term][1].append(pos)
+            except KeyError:
+                current_doc_index[term] = [pid, array('I', [pos])]
+       
+        #norm for TF
+        norm=math.sqrt(sum(len(posting[1])**2 for posting in current_doc_index.values())) if current_doc_index else 0.0
+        for term, posting in current_doc_index.items():
+            tf[term].append(len(posting[1])/norm if norm>0 else 0.0)
+            df[term] +=1
+            index[term].append(posting)
+
+         '''
         norm=math.sqrt(sum(c**2 for c in counts.values())) or 1.0
 
         for term,c in counts.items():
