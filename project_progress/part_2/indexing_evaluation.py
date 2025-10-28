@@ -72,7 +72,6 @@ def create_index_tfidf(docs):
         tokens = build_terms(combined_text)
         
         counts= collections.Counter(tokens)
-       
         norm=math.sqrt(sum(c**2 for c in counts.values())) or 1.0
 
         for term,c in counts.items():
