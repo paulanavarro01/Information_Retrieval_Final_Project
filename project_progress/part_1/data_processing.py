@@ -16,7 +16,7 @@ from array import array
 nltk.download("stopwords")
 
 #load data into memory:
-docs_path = '../../data/fashion_products_dataset.json'
+docs_path = '../data/fashion_products_dataset.json'
 with open(docs_path) as fp:
     lines = fp.readlines()
 lines = [l.strip().replace(' +', ' ') for l in lines]
