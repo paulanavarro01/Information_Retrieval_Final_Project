@@ -21,7 +21,6 @@ from part_1.data_processing import build_terms
 
 #Import the processed and validation csv from the Data folder
 proc_doc_path='../data/processed_docs.jsonl'
-validation_path='../data/validation_labels.csv'
 
 
 def load_processed_docs(path=proc_doc_path):
@@ -80,8 +79,11 @@ def create_index_tfidf(docs):
         
         #count occurrences of each term within the document
         counts= collections.Counter(tokens)
+<<<<<<< HEAD
 
         #compute normalization factor for TF
+=======
+>>>>>>> 657878381b16f11b8f41aeec8505ee5f4d700a68
         norm=math.sqrt(sum(c**2 for c in counts.values())) or 1.0
 
         #fill TF and index

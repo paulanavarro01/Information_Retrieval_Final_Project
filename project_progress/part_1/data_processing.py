@@ -11,12 +11,14 @@ import nltk
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 import json
+import os
 from array import array
 
 nltk.download("stopwords")
 
 #load data into memory:
-docs_path = '../data/fashion_products_dataset.json'
+file_dir= os.path.dirname(os.path.abspath(__file__))
+docs_path = os.path.join(file_dir, '..', '..', 'data', 'fashion_products_dataset.json')
 with open(docs_path) as fp:
     lines = fp.readlines()
 lines = [l.strip().replace(' +', ' ') for l in lines]
