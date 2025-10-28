@@ -190,7 +190,7 @@ def ndcg_k(y_true,y_score,k=10):
 
 
 '''
-Main  LOOK AT IT, DON'T UNDERSTAND QUITE 
+Main  LOOK AT IT, DON'T UNDERSTAND QUITE , s'ha de treure lo dels debug pk tenia algun errors i volia mirar d'on venien
 '''
 
 if __name__ == "__main__":
