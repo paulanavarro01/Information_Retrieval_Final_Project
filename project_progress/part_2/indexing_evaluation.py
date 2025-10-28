@@ -107,20 +107,29 @@ def ranking_docs(terms,docs,index,idf,tf,title_index):
 def search_tf_idf(query, index, tf, idf, title_index):
     query_terms=build_terms(query)
     print(f"Query:{query}, terms: {query_terms}")
-    docs_set= set()
-    for term in query_terms:
+    if not query_terms:
+        return []
+   
+    if query_terms[0] not in index: #start with first term
+        return []
+
+    
+    docs_set= set(posting[0]for posting in index[query_terms[0]])
+
+    #only keeping documents that are present in all term's postings
+    for term in query_terms[1:]:
         if term in index:
             term_docs= [posting[0] for posting in index[term]]
-            docs_set.update(term_docs)
+            docs_set &= set(term_docs)
+        else:
+            doc_set=set()
+            break
     
     print(f"For {query}: {len(docs_set)}")
     if not docs_set:
         return []
     
     docs=list(docs_set)
-    
-    if not docs:
-        return []
    
     return ranking_docs(query_terms,docs,index,idf,tf,title_index)
 
@@ -145,7 +154,19 @@ def average_precision(y_true,y_score,k=10):
             prec_list.append(num_relevant/(i+1))
     return np.sum(prec_list)/num_relevant if num_relevant>0 else 0.0
 
-#map_k from lab 2 DON'T KNWO IF WE HAVE TO DO IT
+def recall_k(y_true,y_score,k=10):
+    order=np.argsort(np.asarray(y_score))[::-1]
+    y_true=np.take(np.asarray(y_true),order)
+    relevenat=np.sum(y_true[:k])
+    total_rel=np.sum(np.asarray(y_true))
+    return relevenat/total_rel if total_rel>0 else 0.0
+
+def f1_k(y_true,y_score,k=10):
+    prec=precision_k(y_true,y_score,k)
+    rec=recall_k(y_true,y_score,k)
+    return (2*prec*rec)/(prec+rec) if (prec+rec)>0 else 0.0
+
+# map_k from lab 2 DON'T KNWO IF WE HAVE TO DO IT
 '''
 def map_at_k(search_res, k=10):
     Parameters
@@ -249,6 +270,8 @@ if __name__ == "__main__":
             print(f"Query:{q}")
             print(f"P@10:{precision_k(y_true,y_score,10):.3f}")
             print(f"AP@10:{average_precision(y_true,y_score,10):.3f}")
+            print(f"R@10:{recall_k(y_true,y_score,10):.3f}")
+            print(f"F1@10:{f1_k(y_true,y_score,10):.3f}")
             print(f"RR@10:{rr_k(y_true,y_score,10):.3f}")
             print(f"NDCG@10:{ndcg_k(y_true,y_score,10):.3f}")
         else:
