@@ -59,4 +59,17 @@ In order to execute this file it's important that the two previous parts have al
 
 In order to see all the outputs all that has to be done is executing the cells in order.
 
+## PART 2
 
+### How to run the code? 
+
+In order to run the second part of the project the first part has to be already executed.
+
+Then, in order to execute the code, go to
+```bash
+
+/project_progress/part_2
+```
+Execute first the file **indexing_evaluation.py** to see the completed activity 1.
+
+And after that go to **evaluation_metrix.ipynb*** and execute each cell in order.
