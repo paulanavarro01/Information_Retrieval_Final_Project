@@ -79,11 +79,8 @@ def create_index_tfidf(docs):
         
         #count occurrences of each term within the document
         counts= collections.Counter(tokens)
-<<<<<<< HEAD
 
         #compute normalization factor for TF
-=======
->>>>>>> 657878381b16f11b8f41aeec8505ee5f4d700a68
         norm=math.sqrt(sum(c**2 for c in counts.values())) or 1.0
 
         #fill TF and index
