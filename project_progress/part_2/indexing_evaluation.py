@@ -207,5 +207,6 @@ if __name__ == "__main__":
         if not result:
             print("No matching documents.")
         else:
-            for pid in result[:5]:
-                print(f"{pid}: {title_index.get(pid,'[No title]')}")
+            print(f"Top results for query: '{q}'")
+            for pid in result[:10]:
+                print(f"{pid}: {title_index.get(pid,'[No title]')}")
