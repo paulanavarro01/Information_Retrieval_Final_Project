@@ -198,7 +198,7 @@ if __name__ == "__main__":
         "solid women white polo",
         "print of multicolor neck grey shirt",
         "slim fit men blue jeans",
-        "round collar full sleeves t-shirt" #mirar lo de t i sense t
+        "round collar full sleeves t-shirt" 
     ]
     
     #run and display top results for each query
