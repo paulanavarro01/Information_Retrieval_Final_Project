@@ -10,28 +10,50 @@ import pandas as pd
 import sys
 
 
-
+'''
 #parent_dir=os.path.dirname(os.path.abspath(__file__))
 #sys.path.append(parent_dir)
 project_root= os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(project_root)
 
 #assumption: assuming part_1.dataprocessing has a correct version of build_terms
-from part_1.data_processing import build_terms
+
 
 #Import the processed and validation csv from the Data folder
-proc_doc_path='../data/processed_docs.jsonl'
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+proc_doc_path = os.path.join(base_dir, "data", "processed_docs.jsonl")
+'''
+# --- PATH CONFIGURATION (CRITICAL FIX) ---
 
+# 1. Get the path of the directory containing THIS file (.../project_progress/part_2)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# 2. Get the parent directory (.../project_progress)
+# We need this so Python can find 'part_1' (which is inside project_progress)
+parent_dir = os.path.dirname(current_dir)
+
+# 3. Add project_progress to sys.path
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
+
+# 4. Get the project root (.../) to find the data folder
+# We go one level up from project_progress
+project_root = os.path.dirname(parent_dir)
+proc_doc_path = os.path.join(project_root, "data", "processed_docs.jsonl")
+
+from part_1.data_processing import build_terms
 
 def load_processed_docs(path=proc_doc_path):
     '''
     Loads the processed product documents stored in JSONL format.
     Each line is one JSON line representing one product.
     '''
-    with open(path,'r',encoding='utf-8') as f:
-        docs=[json.loads(line)for line in f if line.strip()]
-    return docs
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Processed docs not found at: {path}")
 
+    with open(path, 'r', encoding='utf-8') as f:
+        docs = [json.loads(line) for line in f if line.strip()]
+    return docs
 '''
 Inverted index
 '''
@@ -210,3 +232,4 @@ if __name__ == "__main__":
             print(f"Top results for query: '{q}'")
             for pid in result[:10]:
                 print(f"{pid}: {title_index.get(pid,'[No title]')}")
+                

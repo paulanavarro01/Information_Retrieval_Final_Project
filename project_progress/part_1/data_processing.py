@@ -14,14 +14,12 @@ import json
 import os
 from array import array
 
-nltk.download("stopwords")
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download("stopwords")
 
-#load data into memory:
-file_dir= os.path.dirname(os.path.abspath(__file__))
-docs_path = os.path.join(file_dir, '..', '..', 'data', 'fashion_products_dataset.json')
-with open(docs_path) as fp:
-    lines = fp.readlines()
-lines = [l.strip().replace(' +', ' ') for l in lines]
+
 
 def build_terms(text):
     '''
@@ -167,8 +165,16 @@ def preprocess_dataset(input_path, output_path_index, output_path_clean):
 
 
 if __name__ == "__main__":
+    # Determine paths dynamically based on where THIS file is located
+    current_file_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.abspath(os.path.join(current_file_dir, "..", ".."))
+    
+    input_p = os.path.join(project_root, "data", "fashion_products_dataset.json")
+    output_p_index = os.path.join(project_root, "data", "inverted_index.json")
+    output_p_clean = os.path.join(project_root, "data", "processed_docs.jsonl")
+
     preprocess_dataset(
-        input_path="../../data/fashion_products_dataset.json",
-        output_path_index="../../data/inverted_index.json",
-        output_path_clean="../../data/processed_docs.jsonl"
+        input_path=input_p,
+        output_path_index=output_p_index,
+        output_path_clean=output_p_clean
     )
