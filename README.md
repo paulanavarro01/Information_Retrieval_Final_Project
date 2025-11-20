@@ -73,3 +73,24 @@ Then, in order to execute the code, go to
 Execute first the file **indexing_evaluation.py** to see the completed activity 1.
 
 And after that go to **evaluation_metrix.ipynb*** and execute each cell in order.
+
+
+## PART 3
+
+### How to run the code? 
+
+In order to run the third part of the project the first part and second part have to be already executed.
+
+Then, in order to execute the code, go to
+```bash
+
+/project_progress/part_3
+```
+First, install in your terminal 
+
+```bash
+#pip install gensim
+#pip install tabulate
+```
+and then you can already execute all the code in **rankings.ipynb**
+
