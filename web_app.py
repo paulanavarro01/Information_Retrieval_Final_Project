@@ -90,32 +90,24 @@ def search_form_post():
 
 @app.route('/doc_details', methods=['GET'])
 def doc_details():
-    """
-    Show document details page
-    ### Replace with your custom logic ###
-    """
-
-    # getting request parameters:
-    # user = request.args.get('user')
-    print("doc details session: ")
-    print(session)
-
-    res = session["some_var"]
-    print("recovered var from session:", res)
-
-    # get the query string parameters from request
-    clicked_doc_id = request.args["pid"]
+    clicked_doc_id = request.args.get("pid")
     print("click in id={}".format(clicked_doc_id))
 
-    # store data in statistics table 1
-    if clicked_doc_id in analytics_data.fact_clicks.keys():
+    # Store data in statistics table
+    if clicked_doc_id in analytics_data.fact_clicks:
         analytics_data.fact_clicks[clicked_doc_id] += 1
     else:
         analytics_data.fact_clicks[clicked_doc_id] = 1
 
     print("fact_clicks count for id={} is {}".format(clicked_doc_id, analytics_data.fact_clicks[clicked_doc_id]))
-    print(analytics_data.fact_clicks)
-    return render_template('doc_details.html')
+
+    # Fetch the actual document
+    doc = corpus.get(clicked_doc_id)
+    if doc is None:
+        return "Document not found", 404
+
+    # Pass it to the template
+    return render_template('doc_details.html', doc=doc)
 
 
 @app.route('/stats', methods=['GET'])
@@ -137,19 +129,35 @@ def stats():
     return render_template('stats.html', clicks_data=docs)
 
 
-@app.route('/dashboard', methods=['GET'])
+# Example Flask route
+@app.route("/dashboard")
 def dashboard():
-    visited_docs = []
-    for doc_id in analytics_data.fact_clicks.keys():
-        d: Document = corpus[doc_id]
-        doc = ClickedDoc(doc_id, d.description, analytics_data.fact_clicks[doc_id])
-        visited_docs.append(doc)
+    # Top 10 clicked documents
+    sorted_docs = sorted(analytics_data.fact_clicks.items(), key=lambda x: x[1], reverse=True)[:10]
+    top_docs_labels = [corpus[pid].title for pid, _ in sorted_docs]
+    top_docs_counts = [count for _, count in sorted_docs]
 
-    # simulate sort by ranking
-    visited_docs.sort(key=lambda doc: doc.counter, reverse=True)
+    # Top 10 search queries (example, replace with real query stats)
+    top_queries = sorted(analytics_data.fact_searches.items(), key=lambda x: x[1], reverse=True)[:10]
+    top_queries_labels = [q for q, _ in top_queries]
+    top_queries_counts = [c for _, c in top_queries]
 
-    for doc in visited_docs: print(doc)
-    return render_template('dashboard.html', visited_docs=visited_docs)
+    # Rating distribution
+    ratings = [doc.average_rating for doc in corpus.values() if doc.average_rating is not None]
+    rating_labels = ["1", "2", "3", "4", "5"]
+    rating_counts = [sum(1 for r in ratings if int(r) == i) for i in range(1, 6)]
+
+    return render_template(
+        "dashboard.html",
+        page_title="Dashboard",
+        top_docs_labels=top_docs_labels,
+        top_docs_counts=top_docs_counts,
+        top_queries_labels=top_queries_labels,
+        top_queries_counts=top_queries_counts,
+        rating_labels=rating_labels,
+        rating_counts=rating_counts
+    )
+
 
 
 # New route added for generating an examples of basic Altair plot (used for dashboard)

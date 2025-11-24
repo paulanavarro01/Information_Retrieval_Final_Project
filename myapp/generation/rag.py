@@ -1,8 +1,7 @@
 import os
 from groq import Groq
 from dotenv import load_dotenv
-load_dotenv()  # take environment variables from .env
-
+load_dotenv()
 
 class RAGGenerator:
 
@@ -30,20 +29,20 @@ class RAGGenerator:
         - Alternative (optional): ...
     """
 
-    def generate_response(self, user_query: str, retrieved_results: list, top_N: int = 20) -> dict:
-        """
-        Generate a response using the retrieved search results. 
-        Returns:
-            dict: Contains the generated suggestion and the quality evaluation.
-        """
+    def generate_response(self, user_query: str, retrieved_results: list, top_N: int = 20) -> str:
+
         DEFAULT_ANSWER = "RAG is not available. Check your credentials (.env file) or account limits."
+
         try:
-            client = Groq(
-                api_key=os.environ.get("GROQ_API_KEY"),
-            )
+            api_key = os.environ.get("GROQ_API_KEY")
+            if not api_key:
+                print("❌ GROQ_API_KEY not found in environment.")
+                return DEFAULT_ANSWER
+
+            client = Groq(api_key=api_key)
+
             model_name = os.environ.get("GROQ_MODEL", "llama-3.1-8b-instant")
 
-            # Format the retrieved results for the prompt
             formatted_results = "\n".join(
                 [f"- PID: {res.pid}, Title: {res.title}" for res in retrieved_results[:top_N]]
             )
@@ -53,18 +52,13 @@ class RAGGenerator:
                 user_query=user_query
             )
 
-            chat_completion = client.chat.completions.create(
-                messages=[
-                    {
-                        "role": "user",
-                        "content": prompt,
-                    }
-                ],
+            completion = client.chat.completions.create(
                 model=model_name,
+                messages=[{"role": "user", "content": prompt}],
             )
 
-            generation = chat_completion.choices[0].message.content
-            return generation
+            return completion.choices[0].message.content
+
         except Exception as e:
-            print(f"Error during RAG generation: {e}")
+            print(f"❌ Error during RAG generation: {e}")
             return DEFAULT_ANSWER

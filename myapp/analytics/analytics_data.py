@@ -12,11 +12,22 @@ class AnalyticsData:
     # Example of statistics table
     # fact_clicks is a dictionary with the click counters: key = doc id | value = click counter
     fact_clicks = dict([])
+    fact_searches = dict([])
 
     ### Please add your custom tables here:
 
     def save_query_terms(self, terms: str) -> int:
-        print(self)
+        """
+        Track the search query for analytics.
+        Returns a search ID (dummy integer for now).
+        """
+        # Track query count
+        if terms in self.fact_searches:
+            self.fact_searches[terms] += 1
+        else:
+            self.fact_searches[terms] = 1
+
+        # Return a dummy search ID
         return random.randint(0, 100000)
     
     def plot_number_of_views(self):
