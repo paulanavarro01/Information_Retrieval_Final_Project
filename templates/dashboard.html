@@ -2,30 +2,119 @@
 {% block page_title %}{{ page_title }}{% endblock %}
 
 {% block header %}
-    <!-- Next tag loads Charts.js https://www.chartjs.org/docs/latest/ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.min.js"
-            integrity="sha512-tMabqarPtykgDtdtSqCL3uLVM0gS1ZkUAVhRFu1vSEFgvB73niFQWJuvviDyBGBH22Lcau4rHB5p2K2T0Xvr6Q=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
 {% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Dashboard Statistics</h2>
 
-    <!--
-    Examples of what to show in Dashboard:
+    <div class="row g-4">
+        <!-- Top clicked documents -->
+        <div class="col-lg-6 col-md-12">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white fw-bold">
+                    Top 10 Most Clicked Products
+                </div>
+                <div class="card-body">
+                    <canvas id="topDocsChart"></canvas>
+                </div>
+            </div>
+        </div>
 
-    - Ranking of visited documents (from results page)
-    - Visitor's preferred browsers
-    - Visitor's city (from IP)
-    - preferred queries ranking
-    - preferred terms
-    - etc.
+        <!-- Top search queries -->
+        <div class="col-lg-6 col-md-12">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white fw-bold">
+                    Top 10 Search Queries
+                </div>
+                <div class="card-body">
+                    <canvas id="topQueriesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    -->
+    <!-- Rating distribution -->
+    <div class="row g-4 mt-3">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white fw-bold">
+                    Rating Distribution
+                </div>
+                <div class="card-body">
+                    <canvas id="ratingChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <h3>Dashboard</h3>
-    <iframe src="/plot_number_of_views" width="600" height="400" style="border: none;"></iframe>
+<script>
+    // Top clicked documents chart
+    const topDocsCtx = document.getElementById('topDocsChart').getContext('2d');
+    new Chart(topDocsCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ top_docs_labels|safe }},
+            datasets: [{
+                label: 'Clicks',
+                data: {{ top_docs_counts|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
 
+    // Top search queries chart
+    const topQueriesCtx = document.getElementById('topQueriesChart').getContext('2d');
+    new Chart(topQueriesCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ top_queries_labels|safe }},
+            datasets: [{
+                label: 'Searches',
+                data: {{ top_queries_counts|safe }},
+                backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
 
+    // Rating distribution chart
+    const ratingCtx = document.getElementById('ratingChart').getContext('2d');
+    new Chart(ratingCtx, {
+        type: 'pie',
+        data: {
+            labels: {{ rating_labels|safe }},
+            datasets: [{
+                label: 'Number of Products',
+                data: {{ rating_counts|safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
+                ],
+                borderColor: 'rgba(255, 255, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true }
+    });
+</script>
 {% endblock %}
-
-
