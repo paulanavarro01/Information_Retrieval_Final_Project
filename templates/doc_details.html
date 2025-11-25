@@ -22,16 +22,22 @@
     <div class="card mb-4 shadow-sm">
         <div class="row g-0">
             <!-- Product Image -->
-            <div class="col-md-4">
+            <div class="col-md-6 d-flex justify-content-center align-items-center p-3">
                 {% if doc.images and doc.images[0] %}
-                <img src="{{ doc.images[0] }}" class="img-fluid rounded-start" alt="{{ doc.title }}">
+                    <img src="{{ doc.images[0] }}" 
+                        class="img-fluid rounded shadow-sm w-100"
+                        style="height: auto; object-fit: contain; max-height: 600px;"
+                        alt="{{ doc.title }}">
                 {% else %}
-                <img src="https://via.placeholder.com/300x300?text=No+Image" class="img-fluid rounded-start" alt="No image">
+                    <img src="https://via.placeholder.com/600x600?text=No+Image" 
+                        class="img-fluid rounded shadow-sm w-100"
+                        style="height: auto; object-fit: contain; max-height: 600px;"
+                        alt="No image">
                 {% endif %}
             </div>
 
             <!-- Product Info -->
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <div class="card-body">
                     <h2 class="card-title">{{ doc.title }}</h2>
                     
