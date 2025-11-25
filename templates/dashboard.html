@@ -10,6 +10,34 @@
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Dashboard Statistics</h2>
 
+    <!-- Info boxes -->
+    <div class="row text-center mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h5>Total Clicks</h5>
+                    <p class="display-6">{{ total_clicks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h5>Total Searches</h5>
+                    <p class="display-6">{{ total_searches }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h5>Unique Products Clicked</h5>
+                    <p class="display-6">{{ unique_products }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row g-4">
         <!-- Top clicked documents -->
         <div class="col-lg-6 col-md-12">
@@ -19,6 +47,9 @@
                 </div>
                 <div class="card-body">
                     <canvas id="topDocsChart"></canvas>
+                    <p class="text-muted small mt-2">
+                        This chart shows the top 10 products that were clicked the most, helping you identify which items attract the most attention.
+                    </p>
                 </div>
             </div>
         </div>
@@ -31,6 +62,9 @@
                 </div>
                 <div class="card-body">
                     <canvas id="topQueriesChart"></canvas>
+                    <p class="text-muted small mt-2">
+                        This chart shows the most common search queries. It helps understand user intent and popular search terms.
+                    </p>
                 </div>
             </div>
         </div>
@@ -45,6 +79,9 @@
                 </div>
                 <div class="card-body">
                     <canvas id="ratingChart"></canvas>
+                    <p class="text-muted small mt-2">
+                        This bar chart shows how many products exist per rating. Useful for evaluating overall product quality distribution.
+                    </p>
                 </div>
             </div>
         </div>
@@ -94,27 +131,25 @@
         }
     });
 
-    // Rating distribution chart
+    // Rating distribution chart (bar chart instead of pie)
     const ratingCtx = document.getElementById('ratingChart').getContext('2d');
     new Chart(ratingCtx, {
-        type: 'pie',
+        type: 'bar',
         data: {
             labels: {{ rating_labels|safe }},
             datasets: [{
-                label: 'Number of Products',
+                label: 'Number of Products per Rating',
                 data: {{ rating_counts|safe }},
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.7)',
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(255, 206, 86, 0.7)',
-                    'rgba(75, 192, 192, 0.7)',
-                    'rgba(153, 102, 255, 0.7)'
-                ],
-                borderColor: 'rgba(255, 255, 255, 1)',
+                backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                borderColor: 'rgba(255, 159, 64, 1)',
                 borderWidth: 1
             }]
         },
-        options: { responsive: true }
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
     });
 </script>
 {% endblock %}

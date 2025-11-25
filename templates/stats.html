@@ -1,15 +1,47 @@
 {% extends "base.html" %}
 {% block page_title %}{{ page_title }}{% endblock %}
+
 {% block content %}
-    <h2>Quick Stats</h2>
-    <h4>Clicked docs:</h4>
+<div class="container mt-5">
+    <h2 class="mb-4">Quick Stats</h2>
+
+    <!-- Summary boxes -->
+    <div class="row text-center mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h5>Total Products Clicked</h5>
+                    <p class="display-6">{{ total_products }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h5>Total Clicks</h5>
+                    <p class="display-6">{{ total_clicks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h5>Total Queries</h5>
+                    <p class="display-6">{{ total_queries }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% for doc in clicks_data %}
         <div class="pb-3">
-            <div class="">
-                <span class="text-dark"> ({{ doc.count }} visits) </span> — id: {{ doc.pid }} — {{ doc.title }} - {{ doc.description }}
-            </div>
+            <h5><strong>{{ doc.title }}</strong> ({{ doc.count }} clicks)</h5>
+            <p class="mb-1 text-muted">{{ doc.description[:120] }}{% if doc.description|length > 120 %}...{% endif %}</p>
+            {% if doc.top_query %}
+            <p class="mb-0"><em>Top query: "{{ doc.top_query }}"</em></p>
+            {% endif %}
         </div>
         <hr>
     {% endfor %}
+</div>
 {% endblock %}
