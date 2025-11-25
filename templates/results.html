@@ -1,27 +1,61 @@
 {% extends "base.html" %}
 {% block page_title %}{{ page_title }}{% endblock %}
 {% block content %}
-    Found <strong>{{ found_counter }}</strong> results...
+<div class="container mt-4">
+
+    <p>Found <strong>{{ found_counter }}</strong> results...</p>
     <hr>
+
     {% if rag_response %}
-        <div class="mb-4 p-3" style="border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
-            <h5>AI-Generated Summary:</h5>
-            <p>{{ rag_response }}</p>
-        </div>
-    {% endif %}
+    <div class="mb-4 p-3" style="border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+        <h5>AI-Generated Summary:</h5>
+        <p>{{ rag_response }}</p>
+    </div>
     <hr>
+    {% endif %}
+
     {% for item in results_list %}
-        <div class="pb-3">
-            <div class="doc-title">
-                <a href="{{ item.url }}">{{ item.title }}...
-                </a>
+    <div class="card mb-3 shadow-sm">
+        <div class="row g-0">
+            {% if item.images and item.images[0] %}
+            <div class="col-md-3 d-flex justify-content-center align-items-center p-2">
+                <img src="{{ item.images[0] }}" class="img-fluid rounded" style="max-height:120px; object-fit:contain;" alt="{{ item.title }}">
             </div>
-            <div class="doc-desc">
-                {{ item.doc_date }} — {{ item.description }}
-            </div>
+            {% endif %}
 
+            <div class="col-md">
+                <div class="card-body p-2">
+                    <h5 class="card-title mb-1">
+                        <a href="{{ item.url }}">{{ item.title }}</a>
+                    </h5>
+
+                    {% if item.brand %}
+                    <p class="mb-1 text-muted small">{{ item.brand }}{% if item.category %} — {{ item.category }}{% endif %}</p>
+                    {% endif %}
+
+                    {% if item.description %}
+                    <p class="card-text mb-1" style="font-size: 0.95rem;">
+                        {% set words = item.description.split()[:25] %}
+                        {% set query_words = search_query.lower().split() %}
+                        {% for w in words %}
+                            {% if w|lower in query_words %}
+                                <strong>{{ w }}</strong>
+                            {% else %}
+                                {{ w }}
+                            {% endif %}
+                            {% if not loop.last %} {% endif %}
+                        {% endfor %}
+                        ...
+                    </p>
+                    {% endif %}
+
+                    {% if item.selling_price %}
+                    <p class="mb-0"><strong>Price:</strong> ₹{{ item.selling_price }}{% if item.discount %} ({{ item.discount }}% off){% endif %}</p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-
+    </div>
     {% endfor %}
+</div>
 {% endblock %}
-
