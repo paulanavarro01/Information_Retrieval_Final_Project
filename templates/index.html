@@ -6,19 +6,21 @@
     <h1 class="mb-4" style="font-weight: bold; font-size: 2.5rem;">Welcome to IRWA Search Engine</h1>
     <p class="mb-4" style="font-size: 1.2rem; color: #555;">Find the best products and discover exclusive offers!</p>
 
-    <!-- Search Form -->
-    <form class="d-flex justify-content-center mb-3" method="POST" onsubmit="return validate();" action="/search">
-        <input class="form-control me-2" name="search-query" type="search" placeholder="Search products..." aria-label="Search" autofocus style="max-width: 400px;">
-        <button class="btn btn-primary px-4" type="submit">Search</button>
-        <input name="upf-irwa-hidden" type="hidden" value="123">
-    </form>
+    <!-- Search Form with Best Offer Toggle -->
+    <form class="d-flex flex-column align-items-center mb-3" method="POST" onsubmit="return validate();" action="/search">
+        <!-- Search Input & Button -->
+        <div class="d-flex mb-3" style="max-width: 400px; width: 100%;">
+            <input class="form-control me-2" name="search-query" type="search" placeholder="Search products..." aria-label="Search" autofocus>
+            <button class="btn btn-primary px-4" type="submit">Search</button>
+        </div>
 
-    <!-- Best Offer Toggle only -->
-    <form method="POST" action="/search" class="mt-3 d-flex justify-content-center">
+        <!-- Best Offer Toggle Under Search Bar -->
         <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="offersSwitch" name="search-method" value="best_offer">
+            <input class="form-check-input" type="checkbox" id="offersSwitch" name="search-method" value="price_boost">
             <label class="form-check-label fw-bold" for="offersSwitch" style="font-size: 1.1rem;">🌟 Best Offers 🌟</label>
         </div>
+
+        <input name="upf-irwa-hidden" type="hidden" value="123">
     </form>
 
     <!-- Optional Info / Footer -->
