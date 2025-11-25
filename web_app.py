@@ -64,28 +64,31 @@ def index():
     print(session)
     return render_template('index.html', page_title="Welcome")
 
-
 @app.route('/search', methods=['POST'])
 def search_form_post():
-    
     search_query = request.form['search-query']
+    search_method = request.form.get('search-method', 'bm25')  # 'bm25' by default
 
     session['last_search_query'] = search_query
 
     search_id = analytics_data.save_query_terms(search_query)
 
-    results = search_engine.search(search_query, search_id, corpus)
+    results = search_engine.search(search_query, search_id, corpus, method=search_method)
 
-    # generate RAG response based on user query and retrieved results
+    # generate RAG response
     rag_response = rag_generator.generate_response(search_query, results)
-    print("RAG response:", rag_response)
 
     found_count = len(results)
     session['last_found_count'] = found_count
 
-    print(session)
-
-    return render_template('results.html', results_list=results, page_title="Results", found_counter=found_count, rag_response=rag_response)
+    return render_template(
+        'results.html',
+        results_list=results,
+        page_title="Results",
+        found_counter=found_count,
+        rag_response=rag_response,
+        search_query=search_query  # needed for bolding query words
+    )
 
 
 @app.route('/doc_details', methods=['GET'])
