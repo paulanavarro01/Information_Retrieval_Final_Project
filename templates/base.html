@@ -1,27 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {# Using Bootstrap v4.6.1 #}
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/custom.css') }}">
+    <!-- Bootstrap v5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
     <title>{% block page_title %}{% endblock %} - IRWA Search Engine</title>
     {% block header %}{% endblock %}
 </head>
-<body>
-<div class="container">
-    <div class='header text-center'>
-        <a href="/">
-            <img src="{{ url_for('static', filename='logo.png') }}" width="100" alt="UPF logo"/>
+<body class="bg-light">
+
+<!-- Global Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="{{ url_for('static', filename='logo.png') }}" width="40" alt="UPF logo" class="me-2">
+            IRWA Search Engine
         </a>
-        <span> IRWA Search Engine </span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/stats">Stats</a></li>
+                <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+            </ul>
+        </div>
     </div>
-    <hr>
-    <div class='content'>
-        {% block content %}{% endblock %}
-    </div>
-    <hr>
-    <div class='centered'>Information Retrieval and Web Analytics</div>
+</nav>
+
+<!-- Main Content -->
+<div class="container py-4">
+    {% block content %}{% endblock %}
 </div>
+
+<hr class="mt-4">
+<div class="text-center text-muted small mb-4">Information Retrieval and Web Analytics</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

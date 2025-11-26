@@ -5,43 +5,28 @@
 <div class="container mt-5">
     <h2 class="mb-4">Quick Stats</h2>
 
-    <!-- Summary boxes -->
     <div class="row text-center mb-4">
+        {% for label, value in [('Total Products Clicked', total_products), ('Total Clicks', total_clicks), ('Total Queries', total_queries)] %}
         <div class="col-md-4">
             <div class="card shadow-sm bg-light">
                 <div class="card-body">
-                    <h5>Total Products Clicked</h5>
-                    <p class="display-6">{{ total_products }}</p>
+                    <h5>{{ label }}</h5>
+                    <p class="display-6">{{ value }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm bg-light">
-                <div class="card-body">
-                    <h5>Total Clicks</h5>
-                    <p class="display-6">{{ total_clicks }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm bg-light">
-                <div class="card-body">
-                    <h5>Total Queries</h5>
-                    <p class="display-6">{{ total_queries }}</p>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
     {% for doc in clicks_data %}
-        <div class="pb-3">
-            <h5><strong>{{ doc.title }}</strong> ({{ doc.count }} clicks)</h5>
-            <p class="mb-1 text-muted">{{ doc.description[:120] }}{% if doc.description|length > 120 %}...{% endif %}</p>
-            {% if doc.top_query %}
-            <p class="mb-0"><em>Top query: "{{ doc.top_query }}"</em></p>
-            {% endif %}
-        </div>
-        <hr>
+    <div class="pb-3">
+        <h5><strong>{{ doc.title }}</strong> ({{ doc.count }} clicks)</h5>
+        <p class="mb-1 text-muted">{{ doc.description[:120] }}{% if doc.description|length > 120 %}...{% endif %}</p>
+        {% if doc.top_query %}
+        <p class="mb-0"><em>Top query: "{{ doc.top_query }}"</em></p>
+        {% endif %}
+    </div>
+    <hr>
     {% endfor %}
 </div>
 {% endblock %}

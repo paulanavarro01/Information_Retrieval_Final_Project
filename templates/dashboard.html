@@ -2,154 +2,123 @@
 {% block page_title %}{{ page_title }}{% endblock %}
 
 {% block header %}
-<!-- Chart.js library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Dashboard Statistics</h2>
+<div class="container py-5">
+
+    <h2 class="mb-5 text-center fw-bold">Dashboard Statistics</h2>
 
     <!-- Info boxes -->
-    <div class="row text-center mb-4">
+    <div class="row text-center g-4 mb-5">
+
         <div class="col-md-4">
-            <div class="card shadow-sm bg-light">
-                <div class="card-body">
-                    <h5>Total Clicks</h5>
-                    <p class="display-6">{{ total_clicks }}</p>
-                </div>
+            <div class="card shadow-sm stat-card-2 bg-primary text-white">
+                <h5 class="fw-semibold">Total Clicks</h5>
+                <p class="display-6 fw-bold">{{ total_clicks }}</p>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div class="card shadow-sm bg-light">
-                <div class="card-body">
-                    <h5>Total Searches</h5>
-                    <p class="display-6">{{ total_searches }}</p>
-                </div>
+            <div class="card shadow-sm stat-card-2 bg-success text-white">
+                <h5 class="fw-semibold">Total Searches</h5>
+                <p class="display-6 fw-bold">{{ total_searches }}</p>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div class="card shadow-sm bg-light">
-                <div class="card-body">
-                    <h5>Unique Products Clicked</h5>
-                    <p class="display-6">{{ unique_products }}</p>
-                </div>
+            <div class="card shadow-sm stat-card-2 bg-warning text-dark">
+                <h5 class="fw-semibold">Unique Products Clicked</h5>
+                <p class="display-6 fw-bold">{{ unique_products }}</p>
             </div>
         </div>
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
+
         <!-- Top clicked documents -->
-        <div class="col-lg-6 col-md-12">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-primary text-white fw-bold">
+        <div class="col-lg-6">
+            <div class="card shadow-sm rounded-4 h-100">
+                <div class="card-header chart-header text-white bg-primary">
                     Top 10 Most Clicked Products
                 </div>
                 <div class="card-body">
                     <canvas id="topDocsChart"></canvas>
-                    <p class="text-muted small mt-2">
-                        This chart shows the top 10 products that were clicked the most, helping you identify which items attract the most attention.
-                    </p>
                 </div>
             </div>
         </div>
 
         <!-- Top search queries -->
-        <div class="col-lg-6 col-md-12">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-success text-white fw-bold">
+        <div class="col-lg-6">
+            <div class="card shadow-sm rounded-4 h-100">
+                <div class="card-header chart-header text-white bg-success">
                     Top 10 Search Queries
                 </div>
                 <div class="card-body">
                     <canvas id="topQueriesChart"></canvas>
-                    <p class="text-muted small mt-2">
-                        This chart shows the most common search queries. It helps understand user intent and popular search terms.
-                    </p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Rating distribution -->
-    <div class="row g-4 mt-3">
+    <div class="row g-4">
         <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-info text-white fw-bold">
+            <div class="card shadow-sm rounded-4">
+                <div class="card-header chart-header text-white bg-info">
                     Rating Distribution
                 </div>
                 <div class="card-body">
                     <canvas id="ratingChart"></canvas>
-                    <p class="text-muted small mt-2">
-                        This bar chart shows how many products exist per rating. Useful for evaluating overall product quality distribution.
-                    </p>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
+<style>
+.stat-card-2 {
+    border-radius: 18px;
+    padding: 25px 15px;
+    transition: 0.25s ease;
+}
+.stat-card-2:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.18);
+}
+
+.chart-header {
+    font-weight: bold;
+    font-size: 1.05rem;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    padding: 12px 16px;
+}
+</style>
+
+<!-- CHARTS JS (unchanged) -->
 <script>
-    // Top clicked documents chart
-    const topDocsCtx = document.getElementById('topDocsChart').getContext('2d');
-    new Chart(topDocsCtx, {
-        type: 'bar',
-        data: {
-            labels: {{ top_docs_labels|safe }},
-            datasets: [{
-                label: 'Clicks',
-                data: {{ top_docs_counts|safe }},
-                backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-        }
-    });
+const topDocsCtx = document.getElementById('topDocsChart').getContext('2d');
+new Chart(topDocsCtx, {
+    type: 'bar',
+    data: { labels: {{ top_docs_labels|safe }}, datasets: [{ label: 'Clicks', data: {{ top_docs_counts|safe }}, backgroundColor: 'rgba(54, 162, 235, 0.7)', borderColor: 'rgba(54, 162, 235, 1)', borderWidth: 1 }]},
+    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
 
-    // Top search queries chart
-    const topQueriesCtx = document.getElementById('topQueriesChart').getContext('2d');
-    new Chart(topQueriesCtx, {
-        type: 'bar',
-        data: {
-            labels: {{ top_queries_labels|safe }},
-            datasets: [{
-                label: 'Searches',
-                data: {{ top_queries_counts|safe }},
-                backgroundColor: 'rgba(75, 192, 192, 0.7)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-        }
-    });
+const topQueriesCtx = document.getElementById('topQueriesChart').getContext('2d');
+new Chart(topQueriesCtx, {
+    type: 'bar',
+    data: { labels: {{ top_queries_labels|safe }}, datasets: [{ label: 'Searches', data: {{ top_queries_counts|safe }}, backgroundColor: 'rgba(75, 192, 192, 0.7)', borderColor: 'rgba(75, 192, 192, 1)', borderWidth: 1 }]},
+    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
 
-    // Rating distribution chart (bar chart instead of pie)
-    const ratingCtx = document.getElementById('ratingChart').getContext('2d');
-    new Chart(ratingCtx, {
-        type: 'bar',
-        data: {
-            labels: {{ rating_labels|safe }},
-            datasets: [{
-                label: 'Number of Products per Rating',
-                data: {{ rating_counts|safe }},
-                backgroundColor: 'rgba(255, 159, 64, 0.7)',
-                borderColor: 'rgba(255, 159, 64, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-        }
-    });
+const ratingCtx = document.getElementById('ratingChart').getContext('2d');
+new Chart(ratingCtx, {
+    type: 'bar',
+    data: { labels: {{ rating_labels|safe }}, datasets: [{ label: 'Number of Products per Rating', data: {{ rating_counts|safe }}, backgroundColor: 'rgba(255, 159, 64, 0.7)', borderColor: 'rgba(255, 159, 64, 1)', borderWidth: 1 }]},
+    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
 </script>
 {% endblock %}

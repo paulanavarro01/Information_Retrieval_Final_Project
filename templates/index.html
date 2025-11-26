@@ -1,29 +1,25 @@
 {% extends "base.html" %}
 {% block page_title %}{{ page_title }}{% endblock %}
+
 {% block content %}
 <div class="text-center mt-5">
-    <!-- Hero Section -->
-    <h1 class="mb-4" style="font-weight: bold; font-size: 2.5rem;">Welcome to IRWA Search Engine</h1>
-    <p class="mb-4" style="font-size: 1.2rem; color: #555;">Find the best products and discover exclusive offers!</p>
+    <h1 class="mb-4 font-weight-bold display-4">Welcome to IRWA Search Engine</h1>
+    <p class="mb-4 lead text-secondary">Find the best products and discover exclusive offers!</p>
 
-    <!-- Search Form with Best Offer Toggle -->
     <form class="d-flex flex-column align-items-center mb-3" method="POST" onsubmit="return validate();" action="/search">
-        <!-- Search Input & Button -->
         <div class="d-flex mb-3" style="max-width: 400px; width: 100%;">
             <input class="form-control me-2" name="search-query" type="search" placeholder="Search products..." aria-label="Search" autofocus>
-            <button class="btn btn-primary px-4" type="submit">Search</button>
+            <button class="btn btn-primary px-4">Search</button>
         </div>
 
-        <!-- Best Offer Toggle Under Search Bar -->
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="offersSwitch" name="search-method" value="price_boost">
-            <label class="form-check-label fw-bold" for="offersSwitch" style="font-size: 1.1rem;">🌟 Best Offers 🌟</label>
+            <label class="form-check-label fw-bold" for="offersSwitch">🌟 Best Offers 🌟</label>
         </div>
 
-        <input name="upf-irwa-hidden" type="hidden" value="123">
+        <input type="hidden" name="upf-irwa-hidden" value="123">
     </form>
 
-    <!-- Optional Info / Footer -->
-    <p class="text-muted mt-4" style="font-size: 0.95rem;">Quickly explore top products and discounts without any hassle.</p>
+    <p class="text-muted mt-4 small">Quickly explore top products and discounts without any hassle.</p>
 </div>
 {% endblock %}
