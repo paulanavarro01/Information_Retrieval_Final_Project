@@ -6,99 +6,80 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
-
-    <h2 class="mb-5 text-center fw-bold">Dashboard Statistics</h2>
-
-    <!-- Info boxes -->
-    <div class="row text-center g-4 mb-5">
-
-        <div class="col-md-4">
-            <div class="card shadow-sm stat-card-2 bg-primary text-white">
-                <h5 class="fw-semibold">Total Clicks</h5>
-                <p class="display-6 fw-bold">{{ total_clicks }}</p>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow-sm stat-card-2 bg-success text-white">
-                <h5 class="fw-semibold">Total Searches</h5>
-                <p class="display-6 fw-bold">{{ total_searches }}</p>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card shadow-sm stat-card-2 bg-warning text-dark">
-                <h5 class="fw-semibold">Unique Products Clicked</h5>
-                <p class="display-6 fw-bold">{{ unique_products }}</p>
-            </div>
-        </div>
+<div class="container py-5" style="max-width: 1200px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    
+    <!-- Hero Header -->
+    <div class="text-center mb-5 p-5 rounded-4 shadow-lg" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #0284c7 100%); color: white;">
+        <h1 class="display-4 fw-bold mb-2">📈 Dashboard Statistics</h1>
+        <p class="lead opacity-90 mb-0">Analytics & Insights Overview</p>
     </div>
 
-    <div class="row g-4 mb-4">
-
-        <!-- Top clicked documents -->
+    <!-- Charts Section 1 -->
+    <div class="row g-4 mb-5">
         <div class="col-lg-6">
-            <div class="card shadow-sm rounded-4 h-100">
-                <div class="card-header chart-header text-white bg-primary">
-                    Top 10 Most Clicked Products
+            <div class="chart-card h-100 rounded-4 shadow-xl overflow-hidden" style="background: linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 100%); border: 1px solid #bae6fd;">
+                <div class="chart-header p-4 text-white fw-bold rounded-top-4" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); font-size: 1.2rem;">
+                    🔥 Top 10 Most Clicked Products
                 </div>
-                <div class="card-body">
-                    <canvas id="topDocsChart"></canvas>
+                <div class="p-4 bg-white">
+                    <canvas id="topDocsChart" style="height: 400px;"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Top search queries -->
         <div class="col-lg-6">
-            <div class="card shadow-sm rounded-4 h-100">
-                <div class="card-header chart-header text-white bg-success">
-                    Top 10 Search Queries
+            <div class="chart-card h-100 rounded-4 shadow-xl overflow-hidden" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border: 1px solid #86efac;">
+                <div class="chart-header p-4 text-white fw-bold rounded-top-4" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); font-size: 1.2rem;">
+                    🔍 Top 10 Search Queries
                 </div>
-                <div class="card-body">
-                    <canvas id="topQueriesChart"></canvas>
+                <div class="p-4 bg-white">
+                    <canvas id="topQueriesChart" style="height: 400px;"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Rating distribution -->
+    <!-- Rating Chart -->
     <div class="row g-4">
         <div class="col-12">
-            <div class="card shadow-sm rounded-4">
-                <div class="card-header chart-header text-white bg-info">
-                    Rating Distribution
+            <div class="chart-card rounded-4 shadow-xl overflow-hidden" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #fcd34d;">
+                <div class="chart-header p-4 text-white fw-bold rounded-top-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); font-size: 1.2rem;">
+                    ⭐ Rating Distribution
                 </div>
-                <div class="card-body">
-                    <canvas id="ratingChart"></canvas>
+                <div class="p-4 bg-white">
+                    <canvas id="ratingChart" style="height: 400px;"></canvas>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 <style>
-.stat-card-2 {
-    border-radius: 18px;
-    padding: 25px 15px;
-    transition: 0.25s ease;
+.stats-card:hover {
+    transform: translateY(-8px) scale(1.02) !important;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2) !important;
 }
-.stat-card-2:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 22px rgba(0,0,0,0.18);
+
+.chart-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
 }
 
 .chart-header {
-    font-weight: bold;
-    font-size: 1.05rem;
     border-top-left-radius: 16px !important;
     border-top-right-radius: 16px !important;
-    padding: 12px 16px;
+}
+
+.shadow-xl {
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
 }
 </style>
 
-<!-- CHARTS JS (unchanged) -->
+<!-- CHARTS JS (UNCHANGED - 100% PRESERVED) -->
 <script>
 const topDocsCtx = document.getElementById('topDocsChart').getContext('2d');
 new Chart(topDocsCtx, {

@@ -2,7 +2,7 @@
 {% block page_title %}{{ doc.title }}{% endblock %}
 
 {% block content %}
-<div class="card shadow-lg rounded-4 overflow-hidden">
+<div class="card shadow-lg rounded-4 overflow-hidden" style="border: 1px solid #e2e8f0;">
 
     <div class="row g-0">
 
@@ -23,25 +23,26 @@
 
         <!-- Product Info -->
         <div class="col-md-6">
-            <div class="card-body p-4">
+            <div class="card-body p-5">
 
-                <!-- Gradient Title -->
-                <h2 class="card-title gradient-title mb-3">{{ doc.title }}</h2>
+                <!-- Title -->
+                <h2 class="card-title mb-4 fw-bold" style="color: #1e293b;">{{ doc.title }}</h2>
 
                 <!-- Price and Discount -->
-                <p class="card-text fs-5 my-3">
-                    <strong>Price:</strong>
+                <p class="card-text fs-4 my-4 p-3 rounded-3" style="background: #f0fdf4; border-left: 4px solid #10b981;">
+                    <strong style="color: #065f46;">Price:</strong>
                     {% if doc.discount %}
                         <span class="text-decoration-line-through text-muted">₹{{ doc.actual_price }}</span>
-                        <span class="text-danger fw-bold">₹{{ doc.selling_price }} ({{ doc.discount }}% off)</span>
+                        <span class="text-success fw-bold fs-3">₹{{ doc.selling_price }}</span>
+                        <span class="badge bg-danger ms-2">{{ doc.discount }}% off</span>
                     {% else %}
-                        ₹{{ doc.selling_price }}
+                        <span class="text-success fw-bold fs-3">₹{{ doc.selling_price }}</span>
                     {% endif %}
                 </p>
 
                 <!-- Rating -->
                 {% if doc.average_rating %}
-                <p class="card-text mb-3">
+                <p class="card-text mb-4 p-3 rounded-3" style="background: #fef3c7;">
                     <strong>Rating:</strong>
                     {% for i in range(1,6) %}
                         {% if i <= doc.average_rating %}
@@ -57,34 +58,46 @@
                 {% endif %}
 
                 <!-- Brand / Category -->
-                <p class="mb-2">
+                <p class="mb-4 p-3 rounded-3" style="background: #eff6ff;">
                     {% if doc.brand %}<strong>Brand:</strong> {{ doc.brand }}{% endif %}
                     {% if doc.category %}<br><strong>Category:</strong> {{ doc.category }}{% if doc.sub_category %} - {{ doc.sub_category }}{% endif %}{% endif %}
                 </p>
 
-                <!-- Description -->
+                {# Description REMOVED on purpose #}
+                {# 
                 {% if doc.description %}
-                <p class="card-text text-secondary">{{ doc.description }}</p>
+                <p class="card-text mb-4 p-3 rounded-3" style="background: #f8fafc; border-left: 4px solid #3b82f6;">
+                    {{ doc.description }}
+                </p>
                 {% endif %}
+                #}
 
                 <!-- Seller -->
                 {% if doc.seller %}
-                <p class="mb-2"><strong>Seller:</strong> {{ doc.seller }}</p>
+                <p class="mb-4 p-3 rounded-3" style="background: #ecfdf5;">
+                    <strong>Seller:</strong> {{ doc.seller }}
+                </p>
                 {% endif %}
 
                 <!-- Product Details -->
                 {% if doc.product_details %}
-                <h5 class="mt-3 mb-2">Product Details:</h5>
-                <ul class="list-group list-group-flush mb-3">
+                <h5 class="mt-4 mb-3 fw-bold" style="color: #1e293b;">Product Details:</h5>
+                <ul class="list-group list-group-flush mb-4">
                     {% for key, value in doc.product_details.items() %}
-                        <li class="list-group-item py-1"><strong>{{ key }}:</strong> {{ value }}</li>
+                        <li class="list-group-item py-2 border-0" style="background: #f1f5f9;">
+                            <strong>{{ key }}:</strong> {{ value }}
+                        </li>
                     {% endfor %}
                 </ul>
                 {% endif %}
 
-                <!-- External Link -->
+                <!-- BLUE Go to Product Page Button -->
                 {% if doc.url %}
-                <a href="{{ doc.url }}" target="_blank" class="btn btn-gradient btn-lg w-100 mt-3">Go to Product Page</a>
+                <a href="{{ doc.url }}" target="_blank"
+                   class="btn btn-primary btn-lg w-100 mt-3 fw-bold shadow-lg"
+                   style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); border: none;">
+                    🚀 Go to Product Page
+                </a>
                 {% endif %}
 
             </div>

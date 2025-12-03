@@ -2,31 +2,74 @@
 {% block page_title %}{{ page_title }}{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Quick Stats</h2>
+<div class="container mt-5" style="max-width: 900px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    
+    <!-- Header -->
+    <div class="text-center mb-5 p-5 rounded-4 shadow-lg" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; box-shadow: 0 10px 30px rgba(59,130,246,0.4);">
+        <h2 class="mb-1 fw-bold" style="font-size: 2.2rem;">📊 Quick Stats</h2>
+        <p class="mb-0 opacity-90">Dashboard Overview</p>
+    </div>
 
-    <div class="row text-center mb-4">
-        {% for label, value in [('Total Products Clicked', total_products), ('Total Clicks', total_clicks), ('Total Queries', total_queries)] %}
-        <div class="col-md-4">
-            <div class="card shadow-sm bg-light">
-                <div class="card-body">
-                    <h5>{{ label }}</h5>
-                    <p class="display-6">{{ value }}</p>
-                </div>
+    <!-- Top Products List -->
+    <div style="background: #f8fafc; padding: 30px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.08);">
+        <h3 class="mb-4 text-center fw-bold" style="color: #1e293b; background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem;">
+            🔥 Most Clicked Products
+        </h3>
+        
+        {% for doc in clicks_data %}
+        <div class="product-item mb-4 p-4 rounded-3 shadow-sm hover-shadow" 
+             style="background: white; border-left: 5px solid #f59e0b; transition: all 0.3s ease; border-radius: 15px;">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="fw-bold mb-2" style="color: #1e293b; font-size: 1.15rem; line-height: 1.3;">
+                    {{ doc.title }}
+                </h5>
+                <span class="badge bg-warning text-dark fs-6 fw-bold px-3 py-2" style="box-shadow: 0 2px 8px rgba(245,158,11,0.3);">
+                    {{ doc.count }} clicks
+                </span>
             </div>
+            
+            {% if doc.description %}
+            <p class="text-muted mb-3" style="color: #64748b; line-height: 1.6; font-size: 0.95rem;">
+                {{ doc.description[:140] }}{% if doc.description|length > 140 %}...{% endif %}
+            </p>
+            {% endif %}
+            
+            {% if doc.top_query %}
+            <p class="mb-0" style="color: #3b82f6; font-style: italic; font-weight: 500;">
+                🔍 Top query: "{{ doc.top_query }}"
+            </p>
+            {% endif %}
         </div>
         {% endfor %}
-    </div>
-
-    {% for doc in clicks_data %}
-    <div class="pb-3">
-        <h5><strong>{{ doc.title }}</strong> ({{ doc.count }} clicks)</h5>
-        <p class="mb-1 text-muted">{{ doc.description[:120] }}{% if doc.description|length > 120 %}...{% endif %}</p>
-        {% if doc.top_query %}
-        <p class="mb-0"><em>Top query: "{{ doc.top_query }}"</em></p>
+        
+        {% if not clicks_data %}
+        <div class="text-center py-5">
+            <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No click data available yet</p>
+        </div>
         {% endif %}
     </div>
-    <hr>
-    {% endfor %}
 </div>
+
+<style>
+.stats-card:hover {
+    transform: translateY(-8px) scale(1.03) !important;
+    box-shadow: 0 25px 50px rgba(59,130,246,0.4) !important;
+}
+
+.product-item:hover {
+    transform: translateX(8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important;
+    border-left-color: #ef4444 !important;
+}
+
+.hover-shadow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15) !important;
+    transform: translateY(-3px);
+}
+</style>
 {% endblock %}
