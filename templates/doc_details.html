@@ -6,7 +6,6 @@
 
     <div class="row g-0">
 
-        <!-- Product Image -->
         <div class="col-md-6 d-flex justify-content-center align-items-center bg-white p-4">
             {% if doc.images and doc.images[0] %}
                 <img src="{{ doc.images[0] }}" 
@@ -21,14 +20,11 @@
             {% endif %}
         </div>
 
-        <!-- Product Info -->
         <div class="col-md-6">
             <div class="card-body p-5">
 
-                <!-- Title -->
                 <h2 class="card-title mb-4 fw-bold" style="color: #1e293b;">{{ doc.title }}</h2>
 
-                <!-- Price and Discount -->
                 <p class="card-text fs-4 my-4 p-3 rounded-3" style="background: #f0fdf4; border-left: 4px solid #10b981;">
                     <strong style="color: #065f46;">Price:</strong>
                     {% if doc.discount %}
@@ -40,7 +36,6 @@
                     {% endif %}
                 </p>
 
-                <!-- Rating -->
                 {% if doc.average_rating %}
                 <p class="card-text mb-4 p-3 rounded-3" style="background: #fef3c7;">
                     <strong>Rating:</strong>
@@ -57,7 +52,6 @@
                 </p>
                 {% endif %}
 
-                <!-- Brand / Category -->
                 <p class="mb-4 p-3 rounded-3" style="background: #eff6ff;">
                     {% if doc.brand %}<strong>Brand:</strong> {{ doc.brand }}{% endif %}
                     {% if doc.category %}<br><strong>Category:</strong> {{ doc.category }}{% if doc.sub_category %} - {{ doc.sub_category }}{% endif %}{% endif %}
@@ -72,14 +66,12 @@
                 {% endif %}
                 #}
 
-                <!-- Seller -->
                 {% if doc.seller %}
                 <p class="mb-4 p-3 rounded-3" style="background: #ecfdf5;">
                     <strong>Seller:</strong> {{ doc.seller }}
                 </p>
                 {% endif %}
 
-                <!-- Product Details -->
                 {% if doc.product_details %}
                 <h5 class="mt-4 mb-3 fw-bold" style="color: #1e293b;">Product Details:</h5>
                 <ul class="list-group list-group-flush mb-4">
@@ -91,7 +83,6 @@
                 </ul>
                 {% endif %}
 
-                <!-- BLUE Go to Product Page Button -->
                 {% if doc.url %}
                 <a href="{{ doc.url }}" target="_blank"
                    class="btn btn-primary btn-lg w-100 mt-3 fw-bold shadow-lg"

@@ -8,13 +8,11 @@
 {% block content %}
 <div class="container py-5" style="max-width: 1200px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
     
-    <!-- Hero Header -->
     <div class="text-center mb-5 p-5 rounded-4 shadow-lg" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #0284c7 100%); color: white;">
         <h1 class="display-4 fw-bold mb-2">📈 Dashboard Statistics</h1>
         <p class="lead opacity-90 mb-0">Analytics & Insights Overview</p>
     </div>
 
-    <!-- Charts Section 1 -->
     <div class="row g-4 mb-5">
         <div class="col-lg-6">
             <div class="chart-card h-100 rounded-4 shadow-xl overflow-hidden" style="background: linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 100%); border: 1px solid #bae6fd;">
@@ -39,7 +37,6 @@
         </div>
     </div>
 
-    <!-- Rating Chart -->
     <div class="row g-4">
         <div class="col-12">
             <div class="chart-card rounded-4 shadow-xl overflow-hidden" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #fcd34d;">
@@ -79,7 +76,6 @@
 }
 </style>
 
-<!-- CHARTS JS (UNCHANGED - 100% PRESERVED) -->
 <script>
 const topDocsCtx = document.getElementById('topDocsChart').getContext('2d');
 new Chart(topDocsCtx, {
