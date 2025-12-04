@@ -94,3 +94,14 @@ First, install in your terminal
 ```
 and then you can already execute all the code in **rankings.ipynb**
 
+## PART 4
+
+This is the last part of the Information and Web Retrieval project, in which a fully functional search engine has been extended with a complete web interface, a Retrieval-Augmented Generation system, and comprehensive web analytics.
+
+### How to run the code? 
+
+Execute this command:
+
+```bash
+python web_app.py
+```
