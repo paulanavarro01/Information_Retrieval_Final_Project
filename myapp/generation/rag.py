@@ -51,7 +51,7 @@ User Query: {user_query}
 Alternative (optional): ...
 """
     # Initialize RAGGenerator with model and API key from environment variables
-    def _init_(self,model_name_env: str = "GROQ_MODEL",api_key_env: str = "GROQ_API_KEY",default_model: str = "llama-3.1-8b-instant",) -> None:
+    def __init__(self,model_name_env: str = "GROQ_MODEL",api_key_env: str = "GROQ_API_KEY",default_model: str = "llama-3.1-8b-instant",) -> None:
         # Environment variable names and default model
         self.model_env_name = model_name_env
         self.api_key_env_name = api_key_env
