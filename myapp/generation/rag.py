@@ -25,7 +25,7 @@ class RAGGenerator:
     NO_GOOD_PRODUCTS = "There are no good products that fit the request."
 
     PROMPT_TEMPLATE = """
-You are an expert e-commerce advisor. Your task is to pick the best product for the user. Use ONLY the retrieved products below — do NOT invent or assume any products or attributes. Base your recommendation strictly on the attributes provided.
+You are an expert e-commerce advisor. Your task is to pick the best product for the user. Use ONLY the retrieved products below, do NOT invent or assume any products or attributes. Base your recommendation strictly on the attributes provided.
 
 Follow these rules strictly:
 - Always consider color, gender, type (from user query).
@@ -70,13 +70,13 @@ Alternative (optional): ...
    
 
     @staticmethod
-    def _parse_float(value: Any) -> Optional[float]:
+    def parse_float(value: Any) -> Optional[float]:
         try:
             return float(value)
         except (TypeError, ValueError):
             return None
 
-    def _format_product(self, res: Any) -> str:
+    def format_product(self, res: Any) -> str:
         pid = getattr(res, "pid", None) or getattr(res, "id", "<no-pid>")
         title = getattr(res, "title", "") or ""
         brand = getattr(res, "brand", "") or ""
@@ -105,13 +105,7 @@ Alternative (optional): ...
         )
 
     @staticmethod
-    def _format_summary_text(raw: str) -> str:
-        """
-        Ensure:
-        - Always has Best Product line.
-        - Alternative line is on a new line.
-        - 'Alternative: None' (any case/spacing) is removed.
-        """
+    def format_summary_text(raw: str) -> str:
         if not raw:
             return ""
 
@@ -150,7 +144,7 @@ Alternative (optional): ...
                 continue
 
             rating_val = getattr(res, "average_rating", None)
-            rating = self._parse_float(rating_val)
+            rating = self.parse_float(rating_val)
             if rating is not None and rating < 3.0:
                 continue
 
@@ -163,8 +157,8 @@ Alternative (optional): ...
             rating_val = getattr(r, "average_rating", None)
             price_val = getattr(r, "selling_price", None)
 
-            rating = self._parse_float(rating_val) or 0.0
-            price = self._parse_float(price_val)
+            rating = self.parse_float(rating_val) or 0.0
+            price = self.parse_float(price_val)
             if price is None:
                 price = 1e6
 
@@ -177,29 +171,20 @@ Alternative (optional): ...
             return results
 
 
-    def _build_prompt(self, user_query: str, candidates: List[Any]) -> str:
+    def build_prompt(self, user_query: str, candidates: List[Any]) -> str:
         formatted_results = "\n".join(
-            [self._format_product(r) for r in candidates]
+            [self.format_product(r) for r in candidates]
         )
         return self.PROMPT_TEMPLATE.format(
             retrieved_results=formatted_results,
             user_query=user_query,
         )
 
-    def generate_response(
-        self,
-        user_query: str,
-        retrieved_results: List[Any],
-        top_N: int = 10,
-        temperature: float = 0.0,
-        max_tokens: int = 512,
-    ) -> str:
+    def generate_response(self,user_query: str,retrieved_results: List[Any], top_N: int = 10,temperature: float = 0.0, max_tokens: int = 512,) -> str:
         """
         Generate a RAG response based on retrieved results.
         """
-        DEFAULT_ANSWER = (
-            "RAG is not available. Check your credentials (.env file) or account limits."
-        )
+        DEFAULT_ANSWER = ("RAG is not available. Check your credentials (.env file) or account limits.")
 
         if not isinstance(retrieved_results, list):
             retrieved_results = list(retrieved_results or [])
@@ -218,7 +203,7 @@ Alternative (optional): ...
             if not prompt_candidates:
                 return self.NO_GOOD_PRODUCTS
 
-            prompt = self._build_prompt(user_query, prompt_candidates)
+            prompt = self.build_prompt(user_query, prompt_candidates)
 
             messages = [
                 {
@@ -239,7 +224,7 @@ Alternative (optional): ...
             )
 
             raw_generation = chat_completion.choices[0].message.content or ""
-            formatted = self._format_summary_text(raw_generation)
+            formatted = self.format_summary_text(raw_generation)
             return formatted or DEFAULT_ANSWER
 
         except Exception as e:
